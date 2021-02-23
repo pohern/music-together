@@ -12,6 +12,17 @@ export default class Room extends Component {
     };
     this.roomCode = this.props.match.params.roomCode;
     this.getRoomDetails();
+    this.leaveButtonPressed = this.leaveButtonPressed.bind(this)
+  }
+
+  leaveButtonPressed(){
+      const requestOptions = {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'}
+      }
+    fetch('/api/leave-room', requestOptions).then((_response) => {
+        
+    })
   }
 
   getRoomDetails() {
@@ -50,7 +61,7 @@ export default class Room extends Component {
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
-          <Button color='secondary' variant='contained' to='/' component={Link}>
+          <Button color='secondary' variant='contained' onClick>
               Leave Room
           </Button>
         </Grid>
