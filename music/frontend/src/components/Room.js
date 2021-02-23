@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Grid, Typogrpahy, Button, Typography } from "@material-ui/core";
+import { Grid, Button, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import CreateRoomPage from "./CreateRoomPage";
 
@@ -13,26 +13,16 @@ export default class Room extends Component {
       showSettings: false,
     };
     this.roomCode = this.props.match.params.roomCode;
-    this.getRoomDetails();
     this.leaveButtonPressed = this.leaveButtonPressed.bind(this);
     this.updateShowSettings = this.updateShowSettings.bind(this);
     this.renderSettingsButton = this.renderSettingsButton.bind(this);
     this.renderSettings = this.renderSettings.bind(this);
-  }
-
-  leaveButtonPressed() {
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-    };
-    fetch("/api/leave-room", requestOptions).then((_response) => {
-      this.props.leaveRoomCallback();
-      this.props.history.push("/");
-    });
+    this.getRoomDetails = this.getRoomDetails.bind(this);
+    this.getRoomDetails();
   }
 
   getRoomDetails() {
-    fetch("/api/get-room" + "?code=" + this.roomCode)
+    return fetch("/api/get-room" + "?code=" + this.roomCode)
       .then((response) => {
         if (!response.ok) {
           this.props.leaveRoomCallback();
@@ -49,6 +39,17 @@ export default class Room extends Component {
       });
   }
 
+  leaveButtonPressed() {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch("/api/leave-room", requestOptions).then((_response) => {
+      this.props.leaveRoomCallback();
+      this.props.history.push("/");
+    });
+  }
+
   updateShowSettings(value) {
     this.setState({
       showSettings: value,
@@ -63,12 +64,13 @@ export default class Room extends Component {
             update={true}
             votesToSkip={this.state.votesToSkip}
             guestCanPause={this.state.guestCanPause}
-            roomCode={this.state.roomCode}
-            updateCallback={() => {}}
+            roomCode={this.roomCode}
+            updateCallback={this.getRoomDetails}
           />
         </Grid>
         <Grid item xs={12} align='center'>
           <Button
+            variant='contained'
             color='secondary'
             onClick={() => this.updateShowSettings(false)}
           >
@@ -106,7 +108,7 @@ export default class Room extends Component {
         </Grid>
         <Grid item xs={12} align='center'>
           <Typography variant='h6' component='h6'>
-            Votes To Skip: {this.state.votesToSkip}
+            Votes: {this.state.votesToSkip}
           </Typography>
         </Grid>
         <Grid item xs={12} align='center'>
@@ -122,8 +124,8 @@ export default class Room extends Component {
         {this.state.isHost ? this.renderSettingsButton() : null}
         <Grid item xs={12} align='center'>
           <Button
-            color='secondary'
             variant='contained'
+            color='secondary'
             onClick={this.leaveButtonPressed}
           >
             Leave Room
