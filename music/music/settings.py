@@ -35,6 +35,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'spotify.apps.SpotifyConfig',
     'frontend.apps.FrontendConfig',
     'api.apps.ApiConfig',
     'rest_framework',
