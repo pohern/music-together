@@ -5,6 +5,8 @@ import {
   Card,
   IconButton,
   LinearProgress,
+  Button,
+  ButtonGroup,
 } from "@material-ui/core";
 
 
@@ -12,6 +14,22 @@ import {
 export default class MusicPlayer extends Component {
   constructor(props) {
     super(props);
+  }
+
+  pauseSong() {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch("/spotify/pause", requestOptions);
+  }
+
+  playSong() {
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch("/spotify/play", requestOptions);
   }
 
   render() {
@@ -31,12 +49,15 @@ export default class MusicPlayer extends Component {
               {this.props.artist}
             </Typography>
             <div>
-              <IconButton>
-                {this.props.is_playing ? 'Pause': 'Play'}
+                //Play/Pause will only work if host has a premium spotify account
+              <IconButton
+                onClick={() => {
+                  this.props.is_playing ? this.pauseSong() : this.playSong();
+                }}
+              >
+                {this.props.is_playing ? <Button>Pause</Button> : <Button>Play</Button>}
               </IconButton>
-              <IconButton>
-                Skip
-              </IconButton>
+              <IconButton>Skip</IconButton>
             </div>
           </Grid>
         </Grid>
