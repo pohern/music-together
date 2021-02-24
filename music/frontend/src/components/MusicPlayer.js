@@ -49,7 +49,6 @@ export default class MusicPlayer extends Component {
               {this.props.artist}
             </Typography>
             <div>
-                //Play/Pause will only work if host has a premium spotify account
               <IconButton
                 onClick={() => {
                   this.props.is_playing ? this.pauseSong() : this.playSong();
