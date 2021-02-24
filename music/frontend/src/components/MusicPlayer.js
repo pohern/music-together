@@ -9,8 +9,6 @@ import {
   ButtonGroup,
 } from "@material-ui/core";
 
-
-
 export default class MusicPlayer extends Component {
   constructor(props) {
     super(props);
@@ -32,12 +30,12 @@ export default class MusicPlayer extends Component {
     fetch("/spotify/play", requestOptions);
   }
 
-  skipSong(){
-      const requestOptions = {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-      };
-      fetch("/spotify/skip", requestOptions);
+  skipSong() {
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+    };
+    fetch("/spotify/skip", requestOptions);
   }
 
   render() {
@@ -62,9 +60,20 @@ export default class MusicPlayer extends Component {
                   this.props.is_playing ? this.pauseSong() : this.playSong();
                 }}
               >
-                {this.props.is_playing ? <Button>Pause</Button> : <Button>Play</Button>}
+                {this.props.is_playing ? (
+                  <Button>Pause</Button>
+                ) : (
+                  <Button>Play</Button>
+                )}
               </IconButton>
-              <IconButton onClick={() => {this.skipSong()}}>Skip</IconButton>
+              <IconButton
+                onClick={() => {
+                  this.skipSong();
+                }}
+              >
+                {this.props.votes} / {this.props.votes_required}
+                <Button>Skip</Button>
+              </IconButton>
             </div>
           </Grid>
         </Grid>
